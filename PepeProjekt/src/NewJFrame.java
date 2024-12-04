@@ -7,13 +7,16 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.awt.image.BufferedImage;
 
 /**
  *
  * @author ondra
  */
-public class NewJFrame extends javax.swing.JFrame {
 
+public class NewJFrame extends javax.swing.JFrame {
+    private BufferedImage img = null; // Proměnná pro aktuální obrázek
+    private BufferedImage originalImage = null; // Proměnná pro původní obrázek
     /**
      * Creates new form NewJFrame
      */
@@ -242,55 +245,38 @@ public class NewJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        JFileChooser fileChooserLoad = new JFileChooser();
         int returnVal = fileChooserLoad.showOpenDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION){
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooserLoad.getSelectedFile();
-            img = null;
             try {
-                img = ImageIO.read(file);
-                originalImage = img;
-                printIntoLog("Loaded image:" + file.getName());
-                redrawPanel();
-                for (int a = 0; a < menuFilters.getItemCount(); a++){
-                    menuFilters.getItem(a).setEnabled(true);
-                };
-                buttonRunFilter.setEnabled(true);
-                menuItemSaveImage.setEnabled(true);
-                buttonRestoreOriginal.setEnabled(true);
-                radioButtonOriginal.setSelected(true);
-                radioButtonModified.setEnabled(true);
-                radioButtonOriginal.setEnabled(true);
+                img = ImageIO.read(file); // Načtení obrázku
+                //originalImage = img; // Uložení původního obrázku
+                //printIntoLog("Loaded image: " + file.getName()); // Protokolování
+                //redrawPanel(); // Obnovení zobrazení panelu
             } catch (IOException ex) {
-                excDialog = new ExceptionDialog(this, true){};
-                excDialog.setText("Error while reading file.");
-                excDialog.setVisible(true);
+                JOptionPane.showMessageDialog(this, "Error while reading file.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        JFileChooser fileChooserSave = new JFileChooser();
         int returnVal = fileChooserSave.showSaveDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION){
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooserSave.getSelectedFile();
-            int i = file.getName().lastIndexOf('.');
-            if (i > 0){
-                String ext = file.getName().substring(i);
-                ext = ext.toLowerCase();
-                if (ext == null  ext != ".jpg"  ext != ".jpeg"){
-                    file = new File(file.getAbsoluteFile()+".jpg");
-                }
-            } else {
-                file = new File(file.getAbsoluteFile()+".jpg");
+            String fileName = file.getAbsolutePath();
+            if (!fileName.toLowerCase().endsWith(".jpg")) {
+                file = new File(fileName + ".jpg"); // Přidání přípony, pokud chybí
             }
             try {
-                ImageIO.write(img, "jpeg", file);
-            } catch (IOException e){
-                excDialog = new ExceptionDialog(this, true){};
-                excDialog.setText("Error while writing file");
-                excDialog.setVisible(true);
+                ImageIO.write(img, "jpeg", file); // Uložení obrázku
+                JOptionPane.showMessageDialog(this, "Image saved successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Error while writing file.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments
