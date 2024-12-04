@@ -5,6 +5,8 @@
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.awt.image.BufferedImage;
@@ -86,6 +88,11 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jButton4.setText("Generate Image");
         jButton4.setPreferredSize(new java.awt.Dimension(160, 40));
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actionGenerate(evt);
+            }
+        });
 
         jButton5.setText("Restore Original Image");
         jButton5.setPreferredSize(new java.awt.Dimension(160, 40));
@@ -123,7 +130,7 @@ public class NewJFrame extends javax.swing.JFrame {
         jMenuItem1.setText("Load Image");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                actionLoad(evt);
             }
         });
         jMenu1.add(jMenuItem1);
@@ -131,7 +138,7 @@ public class NewJFrame extends javax.swing.JFrame {
         jMenuItem2.setText("Save Image");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                actionSave(evt);
             }
         });
         jMenu1.add(jMenuItem2);
@@ -244,13 +251,52 @@ public class NewJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void actionGenerate(ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        int resolution = 5000;
+
+        BufferedImage generatedImg = new BufferedImage(3 * resolution, 2 * resolution, BufferedImage.TYPE_3BYTE_BGR);
+
+        for (int x = -2 * resolution; x < generatedImg.getWidth() - 2 * resolution; x++){
+            for (int y = -resolution; y < generatedImg.getHeight() - resolution; y++){
+                float[] z = new float[]{0, 0};
+                float[] C = new float[]{(float) x / resolution, (float) y / resolution};
+
+                // (a + bi)^2 = a^2 + 2abi + b^2i^2 = (a˘2-b˘2) + 2abi
+                // [a, b] * [a, b] = [a^2 - b^2, 2*a*b]
+                // [a, b] * [a, b] + [c, d] =
+                // [z[0]*z[0] - z[1]*z[1] + C[0], 2*z[0]*z[1] + C[1]]
+
+                boolean isStable = true;
+                for (int i = 0; i < 1000; i++) {
+                    float newz0 = z[0]*z[0] - z[1]*z[1] + C[0];
+                    float newz1 = 2*z[0]*z[1] + C[1];
+                    z[0] = newz0;
+                    z[1] = newz1;
+
+                    if (z[0]*z[0] + z[1]*z[1] > 4) {
+                        // Point is not in the set
+                        isStable = false;
+                        generatedImg.setRGB(x + 2 * resolution, y + resolution, (new Color(255, 255, 255).getRGB()));
+
+                        break;
+                    }
+                }
+                if (isStable) {
+                    generatedImg.setRGB(x + 2 * resolution, y + resolution, (new Color(0, 0, 0).getRGB()));
+                }
+            }
+        }
+        System.out.println("Image done");
+        this.img = generatedImg;
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void actionLoad(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         JFileChooser fileChooserLoad = new JFileChooser();
         int returnVal = fileChooserLoad.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooserLoad.getSelectedFile();
             try {
-                img = ImageIO.read(file); // Načtení obrázku
+                this.img = ImageIO.read(file); // Načtení obrázku
                 //originalImage = img; // Uložení původního obrázku
                 //printIntoLog("Loaded image: " + file.getName()); // Protokolování
                 //redrawPanel(); // Obnovení zobrazení panelu
@@ -260,7 +306,7 @@ public class NewJFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void actionSave(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         JFileChooser fileChooserSave = new JFileChooser();
         int returnVal = fileChooserSave.showSaveDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -270,7 +316,7 @@ public class NewJFrame extends javax.swing.JFrame {
                 file = new File(fileName + ".jpg"); // Přidání přípony, pokud chybí
             }
             try {
-                ImageIO.write(img, "jpeg", file); // Uložení obrázku
+                ImageIO.write(this.img, "jpeg", file); // Uložení obrázku
                 JOptionPane.showMessageDialog(this, "Image saved successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Error while writing file.", "Error", JOptionPane.ERROR_MESSAGE);
