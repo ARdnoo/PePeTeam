@@ -252,7 +252,7 @@ public class NewJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void actionGenerate(ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        int resolution = 5000;
+        int resolution = 100;
 
         BufferedImage generatedImg = new BufferedImage(3 * resolution, 2 * resolution, BufferedImage.TYPE_3BYTE_BGR);
 
