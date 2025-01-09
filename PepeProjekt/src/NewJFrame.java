@@ -17,7 +17,7 @@ import java.awt.image.BufferedImage;
  */
 
 public class NewJFrame extends javax.swing.JFrame {
-    private BufferedImage img = null; // Proměnná pro aktuální obrázek
+    private BufferedImage currentImage = null; // Proměnná pro aktuální obrázek
     private BufferedImage originalImage = null; // Proměnná pro původní obrázek
     /**
      * Creates new form NewJFrame
@@ -35,12 +35,12 @@ public class NewJFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        setImageButton = new javax.swing.JButton();
+        editMatrixButton = new javax.swing.JButton();
+        applyMatrixButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        generateImageButton = new javax.swing.JButton();
+        restoreOriginalButton = new javax.swing.JButton();
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
         jPanel2 = new javax.swing.JPanel();
@@ -63,43 +63,54 @@ public class NewJFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("Select Image file");
-        jButton1.setMaximumSize(new java.awt.Dimension(120, 25));
-        jButton1.setMinimumSize(new java.awt.Dimension(120, 25));
-        jButton1.setPreferredSize(new java.awt.Dimension(160, 25));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        setImageButton.setText("Select Image file");
+        setImageButton.setMaximumSize(new java.awt.Dimension(120, 25));
+        setImageButton.setMinimumSize(new java.awt.Dimension(120, 25));
+        setImageButton.setPreferredSize(new java.awt.Dimension(160, 25));
+        setImageButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                actionLoad(evt);
             }
         });
 
-        jButton2.setText("Edit matrix");
-        jButton2.setMaximumSize(new java.awt.Dimension(120, 25));
-        jButton2.setMinimumSize(new java.awt.Dimension(120, 25));
-        jButton2.setPreferredSize(new java.awt.Dimension(160, 25));
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        editMatrixButton.setText("Edit matrix");
+        editMatrixButton.setMaximumSize(new java.awt.Dimension(120, 25));
+        editMatrixButton.setMinimumSize(new java.awt.Dimension(120, 25));
+        editMatrixButton.setPreferredSize(new java.awt.Dimension(160, 25));
+        editMatrixButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Apply matrix filter");
-        jButton3.setPreferredSize(new java.awt.Dimension(160, 25));
+        applyMatrixButton.setText("Apply matrix filter");
+        applyMatrixButton.setPreferredSize(new java.awt.Dimension(160, 25));
 
-        jButton4.setText("Generate Image");
-        jButton4.setPreferredSize(new java.awt.Dimension(160, 40));
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        generateImageButton.setText("Generate Image");
+        generateImageButton.setPreferredSize(new java.awt.Dimension(160, 40));
+        generateImageButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 actionGenerate(evt);
             }
         });
 
-        jButton5.setText("Restore Original Image");
-        jButton5.setPreferredSize(new java.awt.Dimension(160, 40));
+        restoreOriginalButton.setText("Restore Original Image");
+        restoreOriginalButton.setPreferredSize(new java.awt.Dimension(160, 40));
+        restoreOriginalButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                System.out.println("erasing all changes");
+                currentImage = originalImage;
+            }
+        });
 
         jRadioButton1.setText("Original Image");
 
         jRadioButton2.setText("Modified Image");
+
+        // Group the buttons
+        ButtonGroup group = new ButtonGroup();
+        group.add(jRadioButton1);
+        group.add(jRadioButton2);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -187,6 +198,13 @@ public class NewJFrame extends javax.swing.JFrame {
         jMenu4.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
         jMenuBar1.add(jMenu4);
 
+        jMenu4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Stage stage = (Stage) jMenu4.getScene().getWindow();
+                stage.close();
+            }
+        });
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -203,12 +221,12 @@ public class NewJFrame extends javax.swing.JFrame {
                         .addGap(56, 56, 56))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(editMatrixButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(setImageButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(applyMatrixButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane1)
-                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(generateImageButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(restoreOriginalButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jRadioButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jRadioButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(25, 25, 25))))
@@ -219,19 +237,19 @@ public class NewJFrame extends javax.swing.JFrame {
                 .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(setImageButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(editMatrixButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(applyMatrixButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(generateImageButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(restoreOriginalButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jRadioButton1))
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -245,6 +263,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         System.out.println("neoceoceoceo");
+        actionLoad(evt);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -287,7 +306,7 @@ public class NewJFrame extends javax.swing.JFrame {
             }
         }
         System.out.println("Image done");
-        this.img = generatedImg;
+        this.currentImage = generatedImg;
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void actionLoad(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -296,8 +315,8 @@ public class NewJFrame extends javax.swing.JFrame {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooserLoad.getSelectedFile();
             try {
-                this.img = ImageIO.read(file); // Načtení obrázku
-                //originalImage = img; // Uložení původního obrázku
+                this.currentImage = ImageIO.read(file); // Načtení obrázku
+                originalImage = currentImage; // Uložení původního obrázku
                 //printIntoLog("Loaded image: " + file.getName()); // Protokolování
                 //redrawPanel(); // Obnovení zobrazení panelu
             } catch (IOException ex) {
@@ -316,7 +335,7 @@ public class NewJFrame extends javax.swing.JFrame {
                 file = new File(fileName + ".jpg"); // Přidání přípony, pokud chybí
             }
             try {
-                ImageIO.write(this.img, "jpeg", file); // Uložení obrázku
+                ImageIO.write(this.currentImage, "jpeg", file); // Uložení obrázku
                 JOptionPane.showMessageDialog(this, "Image saved successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Error while writing file.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -360,11 +379,11 @@ public class NewJFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JButton setImageButton;
+    private javax.swing.JButton editMatrixButton;
+    private javax.swing.JButton applyMatrixButton;
+    private javax.swing.JButton generateImageButton;
+    private javax.swing.JButton restoreOriginalButton;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
