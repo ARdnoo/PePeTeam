@@ -18,7 +18,7 @@ import java.awt.image.BufferedImage;
 
 public class NewJFrame extends javax.swing.JFrame {
     private BufferedImage currentImage = null; // Proměnná pro aktuální obrázek
-    private BufferedImage originalImage = null; // Proměnná pro původní obrázek
+    private BufferedImage previousImage = null; // Proměnná pro původní obrázek
     /**
      * Creates new form NewJFrame
      */
@@ -41,25 +41,25 @@ public class NewJFrame extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         generateImageButton = new javax.swing.JButton();
         restoreOriginalButton = new javax.swing.JButton();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        originalRadioButton = new javax.swing.JRadioButton();
+        modifiedRadioButton = new javax.swing.JRadioButton();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
-        jMenuItem6 = new javax.swing.JMenuItem();
-        jMenuItem7 = new javax.swing.JMenuItem();
-        jMenuItem8 = new javax.swing.JMenuItem();
-        jMenuItem9 = new javax.swing.JMenuItem();
-        jMenuItem10 = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
-        jMenu4 = new javax.swing.JMenu();
+        fileMenu = new javax.swing.JMenu();
+        loadImageMenuItem = new javax.swing.JMenuItem();
+        saveImageMenuItem = new javax.swing.JMenuItem();
+        filtersMenu = new javax.swing.JMenu();
+        negativeFilterMenuItem = new javax.swing.JMenuItem();
+        pixelizerFilterMenuItem = new javax.swing.JMenuItem();
+        identityFilterMenuItem = new javax.swing.JMenuItem();
+        tresholdFilterMenuItem = new javax.swing.JMenuItem();
+        oldStyleFilterMenuItem = new javax.swing.JMenuItem();
+        bwFilterMenuItem = new javax.swing.JMenuItem();
+        vinetteFilterMenuItem = new javax.swing.JMenuItem();
+        colorizerFilterMenuItem = new javax.swing.JMenuItem();
+        aboutMenu = new javax.swing.JMenu();
+        exitMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -99,18 +99,17 @@ public class NewJFrame extends javax.swing.JFrame {
         restoreOriginalButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 System.out.println("erasing all changes");
-                currentImage = originalImage;
+                currentImage = previousImage;
             }
         });
 
-        jRadioButton1.setText("Original Image");
-
-        jRadioButton2.setText("Modified Image");
+        originalRadioButton.setText("Original Image");
+        modifiedRadioButton.setText("Modified Image");
 
         // Group the buttons
         ButtonGroup group = new ButtonGroup();
-        group.add(jRadioButton1);
-        group.add(jRadioButton2);
+        group.add(originalRadioButton);
+        group.add(modifiedRadioButton);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -134,74 +133,75 @@ public class NewJFrame extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jMenu1.setText("   File");
-        jMenu1.setPreferredSize(new java.awt.Dimension(50, 11));
-        jMenu1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        // The "file" menu group
+        fileMenu.setText("   File");
+        fileMenu.setPreferredSize(new java.awt.Dimension(50, 11));
+        fileMenu.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
-        jMenuItem1.setText("Load Image");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        loadImageMenuItem.setText("Load Image");
+        loadImageMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 actionLoad(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        fileMenu.add(loadImageMenuItem);
 
-        jMenuItem2.setText("Save Image");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        saveImageMenuItem.setText("Save Image");
+        saveImageMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 actionSave(evt);
             }
         });
-        jMenu1.add(jMenuItem2);
+        fileMenu.add(saveImageMenuItem);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(fileMenu);
 
-        jMenu2.setText("Filters");
-        jMenu2.setPreferredSize(new java.awt.Dimension(50, 11));
-        jMenu2.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        // The "filters" menu group
+        filtersMenu.setText("Filters");
+        filtersMenu.setPreferredSize(new java.awt.Dimension(50, 11));
+        filtersMenu.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
-        jMenuItem3.setText("negative");
-        jMenu2.add(jMenuItem3);
+        negativeFilterMenuItem.setText("negative");
+        filtersMenu.add(negativeFilterMenuItem);
 
-        jMenuItem4.setText("Pixelizer");
-        jMenu2.add(jMenuItem4);
+        pixelizerFilterMenuItem.setText("Pixelizer");
+        filtersMenu.add(pixelizerFilterMenuItem);
 
-        jMenuItem5.setText("identity");
-        jMenu2.add(jMenuItem5);
+        identityFilterMenuItem.setText("identity");
+        filtersMenu.add(identityFilterMenuItem);
 
-        jMenuItem6.setText("treshold");
-        jMenu2.add(jMenuItem6);
+        tresholdFilterMenuItem.setText("treshold");
+        filtersMenu.add(tresholdFilterMenuItem);
 
-        jMenuItem7.setText("OldStyleFilter");
-        jMenu2.add(jMenuItem7);
+        oldStyleFilterMenuItem.setText("OldStyleFilter");
+        filtersMenu.add(oldStyleFilterMenuItem);
 
-        jMenuItem8.setText("BW filter");
-        jMenu2.add(jMenuItem8);
+        bwFilterMenuItem.setText("BW filter");
+        filtersMenu.add(bwFilterMenuItem);
 
-        jMenuItem9.setText("Vinette");
-        jMenu2.add(jMenuItem9);
+        vinetteFilterMenuItem.setText("Vinette");
+        filtersMenu.add(vinetteFilterMenuItem);
 
-        jMenuItem10.setText("Colorizer");
-        jMenu2.add(jMenuItem10);
+        colorizerFilterMenuItem.setText("Colorizer");
+        filtersMenu.add(colorizerFilterMenuItem);
 
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(filtersMenu);
 
-        jMenu3.setText("About");
-        jMenu3.setPreferredSize(new java.awt.Dimension(50, 11));
-        jMenu3.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        jMenuBar1.add(jMenu3);
+        aboutMenu.setText("About");
+        aboutMenu.setPreferredSize(new java.awt.Dimension(50, 11));
+        aboutMenu.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jMenuBar1.add(aboutMenu);
 
-        jMenu4.setText("Exit");
-        jMenu4.setMaximumSize(new java.awt.Dimension(50, 546444));
-        jMenu4.setPreferredSize(new java.awt.Dimension(50, 20));
-        jMenu4.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        jMenu4.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
-        jMenuBar1.add(jMenu4);
+        exitMenu.setText("Exit");
+        exitMenu.setMaximumSize(new java.awt.Dimension(50, 546444));
+        exitMenu.setPreferredSize(new java.awt.Dimension(50, 20));
+        exitMenu.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        exitMenu.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        jMenuBar1.add(exitMenu);
 
-        jMenu4.addActionListener(new java.awt.event.ActionListener() {
+        exitMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Stage stage = (Stage) jMenu4.getScene().getWindow();
-                stage.close();
+                System.exit(0);
             }
         });
 
@@ -227,8 +227,8 @@ public class NewJFrame extends javax.swing.JFrame {
                             .addComponent(jScrollPane1)
                             .addComponent(generateImageButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(restoreOriginalButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jRadioButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jRadioButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(originalRadioButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(modifiedRadioButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(25, 25, 25))))
         );
         layout.setVerticalGroup(
@@ -251,15 +251,18 @@ public class NewJFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(restoreOriginalButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jRadioButton1))
+                        .addComponent(originalRadioButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(modifiedRadioButton))
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
-                .addComponent(jRadioButton2)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         System.out.println("neoceoceoceo");
@@ -306,6 +309,7 @@ public class NewJFrame extends javax.swing.JFrame {
             }
         }
         System.out.println("Image done");
+        previousImage = currentImage; // Uložení původního obrázku
         this.currentImage = generatedImg;
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -315,8 +319,9 @@ public class NewJFrame extends javax.swing.JFrame {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooserLoad.getSelectedFile();
             try {
+                previousImage = currentImage; // Uložení původního obrázku
                 this.currentImage = ImageIO.read(file); // Načtení obrázku
-                originalImage = currentImage; // Uložení původního obrázku
+
                 //printIntoLog("Loaded image: " + file.getName()); // Protokolování
                 //redrawPanel(); // Obnovení zobrazení panelu
             } catch (IOException ex) {
@@ -336,6 +341,7 @@ public class NewJFrame extends javax.swing.JFrame {
             }
             try {
                 ImageIO.write(this.currentImage, "jpeg", file); // Uložení obrázku
+                //printIntoLog("Saved image to: " + file.getName()); // Protokolování
                 JOptionPane.showMessageDialog(this, "Image saved successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Error while writing file.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -384,25 +390,25 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JButton applyMatrixButton;
     private javax.swing.JButton generateImageButton;
     private javax.swing.JButton restoreOriginalButton;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu fileMenu;
+    private javax.swing.JMenu filtersMenu;
+    private javax.swing.JMenu aboutMenu;
+    private javax.swing.JMenu exitMenu;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem10;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JMenuItem jMenuItem7;
-    private javax.swing.JMenuItem jMenuItem8;
-    private javax.swing.JMenuItem jMenuItem9;
+    private javax.swing.JMenuItem loadImageMenuItem;
+    private javax.swing.JMenuItem colorizerFilterMenuItem;
+    private javax.swing.JMenuItem saveImageMenuItem;
+    private javax.swing.JMenuItem negativeFilterMenuItem;
+    private javax.swing.JMenuItem pixelizerFilterMenuItem;
+    private javax.swing.JMenuItem identityFilterMenuItem;
+    private javax.swing.JMenuItem tresholdFilterMenuItem;
+    private javax.swing.JMenuItem oldStyleFilterMenuItem;
+    private javax.swing.JMenuItem bwFilterMenuItem;
+    private javax.swing.JMenuItem vinetteFilterMenuItem;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
+    private javax.swing.JRadioButton originalRadioButton;
+    private javax.swing.JRadioButton modifiedRadioButton;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
