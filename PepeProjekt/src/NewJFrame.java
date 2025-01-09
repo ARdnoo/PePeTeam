@@ -34,7 +34,6 @@ public class NewJFrame extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         setImageButton = new javax.swing.JButton();
         editMatrixButton = new javax.swing.JButton();
         applyMatrixButton = new javax.swing.JButton();
@@ -77,11 +76,6 @@ public class NewJFrame extends javax.swing.JFrame {
         editMatrixButton.setMaximumSize(new java.awt.Dimension(120, 25));
         editMatrixButton.setMinimumSize(new java.awt.Dimension(120, 25));
         editMatrixButton.setPreferredSize(new java.awt.Dimension(160, 25));
-        editMatrixButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
 
         applyMatrixButton.setText("Apply matrix filter");
         applyMatrixButton.setPreferredSize(new java.awt.Dimension(160, 25));
@@ -98,7 +92,7 @@ public class NewJFrame extends javax.swing.JFrame {
         restoreOriginalButton.setPreferredSize(new java.awt.Dimension(160, 40));
         restoreOriginalButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                System.out.println("erasing all changes");
+                printIntoLog("Restored previous image.");
                 currentImage = previousImage;
             }
         });
@@ -161,16 +155,31 @@ public class NewJFrame extends javax.swing.JFrame {
         filtersMenu.setPreferredSize(new java.awt.Dimension(50, 11));
         filtersMenu.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
-        negativeFilterMenuItem.setText("negative");
+        negativeFilterMenuItem.setText("Negative");
         filtersMenu.add(negativeFilterMenuItem);
+        negativeFilterMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filterNegative();
+            }
+        });
 
         pixelizerFilterMenuItem.setText("Pixelizer");
         filtersMenu.add(pixelizerFilterMenuItem);
+        pixelizerFilterMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filterPixelizer();
+            }
+        });
 
-        identityFilterMenuItem.setText("identity");
+        identityFilterMenuItem.setText("Identity");
         filtersMenu.add(identityFilterMenuItem);
+        pixelizerFilterMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filterIdentity();
+            }
+        });
 
-        tresholdFilterMenuItem.setText("treshold");
+        tresholdFilterMenuItem.setText("Treshold");
         filtersMenu.add(tresholdFilterMenuItem);
 
         oldStyleFilterMenuItem.setText("OldStyleFilter");
@@ -192,6 +201,12 @@ public class NewJFrame extends javax.swing.JFrame {
         aboutMenu.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jMenuBar1.add(aboutMenu);
 
+        aboutMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actionAbout();
+            }
+        });
+
         exitMenu.setText("Exit");
         exitMenu.setMaximumSize(new java.awt.Dimension(50, 546444));
         exitMenu.setPreferredSize(new java.awt.Dimension(50, 20));
@@ -201,7 +216,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         exitMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                System.exit(0);
+                actionExit();
             }
         });
 
@@ -262,19 +277,91 @@ public class NewJFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void actionExit() {
+        System.exit(0);
+    }
 
+    private void actionAbout() {
+        JOptionPane.showMessageDialog(this, "Program Vytvořili:\n- Matematik: Artur Balák\n- GUI designér: Ondřej Tichý\n- Generální zprovozňovatel: Alex Brožík\n- Nějak zařídil aby to vůbec jelo: Herbert Géč\n\nSpeciální poděkování patří Petru Pavlovi.", "Credits", JOptionPane.INFORMATION_MESSAGE);
+    }
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        System.out.println("neoceoceoceo");
-        actionLoad(evt);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void filterPixelizer() {
+        if (currentImage == null) {
+            JOptionPane.showMessageDialog(this, "There is no image loaded.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        printIntoLog("Applied pixelizer filter");
+        previousImage = currentImage;   // Save the current image as the previous image
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+        int currentWidth = currentImage.getWidth();
+        int currentHeight = currentImage.getHeight();
+
+        BufferedImage newImage = new BufferedImage(currentWidth + 4 - currentWidth % 4, currentHeight + 4 - currentHeight % 4, BufferedImage.TYPE_3BYTE_BGR);
+
+        // Apply the filter
+        for (int x = 0; x < currentWidth; x += 4) {
+            for (int y = 0; y < currentHeight; y += 4) {
+                // For every block of 4*4 pixels, calculate the average color and paint it into the new image
+                matrixHelper colorAVG = new matrixHelper();
+
+                for (int blockX = x; blockX < x + 4; blockX++) {
+                    for (int blockY = y; blockY < y + 4; blockY++) {
+                        try {
+                            colorAVG.addColor(currentImage.getRGB(blockX, blockY));
+                        } catch (Exception _) {
+                        }
+                    }
+                }
+
+                int colorValue = colorAVG.getNormalisedValue();
+
+                for (int blockX = x; blockX < x + 4; blockX++) {
+                    for (int blockY = y; blockY < y + 4; blockY++) {
+                        newImage.setRGB(blockX, blockY, colorValue);
+                    }
+                }
+            }
+        }
+
+        currentImage = newImage;
+    }
+
+    // Function for writing into log
+    private void printIntoLog(String message) {
+        // For now, just write to console
+        System.out.println(message);
+    }
+
+    private void filterNegative() {
+        if (currentImage == null) {
+            JOptionPane.showMessageDialog(this, "There is no image loaded.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        printIntoLog("Applied negative filter");
+        previousImage = currentImage;   // Save the current image as the previous image
+
+        // Apply the filter
+        for (int x = 0; x < previousImage.getWidth(); x++){
+            for (int y = 0; y < previousImage.getHeight(); y++){
+                currentImage.setRGB(x, y, 16777215 - currentImage.getRGB(x, y));
+            }
+        }
+    }
+
+    private void filterIdentity() {
+        if (currentImage == null) {
+            JOptionPane.showMessageDialog(this, "There is no image loaded.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        printIntoLog("Applied identity filter.");
+        previousImage = currentImage;
+
+        // The new image is the same as the last image
+    }
 
     private void actionGenerate(ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        int resolution = 100;
+        printIntoLog("Generating image...");
+        int resolution = 1000;
 
         BufferedImage generatedImg = new BufferedImage(3 * resolution, 2 * resolution, BufferedImage.TYPE_3BYTE_BGR);
 
@@ -308,9 +395,9 @@ public class NewJFrame extends javax.swing.JFrame {
                 }
             }
         }
-        System.out.println("Image done");
+        printIntoLog("Generation finished.");
         previousImage = currentImage; // Uložení původního obrázku
-        this.currentImage = generatedImg;
+        currentImage = generatedImg;
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void actionLoad(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -322,7 +409,7 @@ public class NewJFrame extends javax.swing.JFrame {
                 previousImage = currentImage; // Uložení původního obrázku
                 this.currentImage = ImageIO.read(file); // Načtení obrázku
 
-                //printIntoLog("Loaded image: " + file.getName()); // Protokolování
+                printIntoLog("Loaded image: " + file.getName()); // Protokolování
                 //redrawPanel(); // Obnovení zobrazení panelu
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Error while reading file.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -331,6 +418,10 @@ public class NewJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void actionSave(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        if (currentImage == null) {
+            JOptionPane.showMessageDialog(this, "There is no image loaded.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         JFileChooser fileChooserSave = new JFileChooser();
         int returnVal = fileChooserSave.showSaveDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -341,7 +432,7 @@ public class NewJFrame extends javax.swing.JFrame {
             }
             try {
                 ImageIO.write(this.currentImage, "jpeg", file); // Uložení obrázku
-                //printIntoLog("Saved image to: " + file.getName()); // Protokolování
+                printIntoLog("Saved image as: " + file.getName()); // Protokolování
                 JOptionPane.showMessageDialog(this, "Image saved successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Error while writing file.", "Error", JOptionPane.ERROR_MESSAGE);
