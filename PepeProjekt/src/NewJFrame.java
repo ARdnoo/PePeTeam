@@ -7,18 +7,35 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.awt.image.BufferedImage;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author ondra
  */
 
-public class NewJFrame extends javax.swing.JFrame {
+public class NewJFrame extends JFrame {
     private BufferedImage currentImage = null; // Proměnná pro aktuální obrázek
     private BufferedImage previousImage = null; // Proměnná pro původní obrázek
+
+    private int[][] matrix = {
+            {
+                1, 1, 1
+            },
+            {
+                1, 1, 1
+            },
+            {
+                1, 1, 1
+            }
+    };
+    private boolean normalize = true;
+
     /**
      * Creates new form NewJFrame
      */
@@ -34,64 +51,69 @@ public class NewJFrame extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        setImageButton = new javax.swing.JButton();
-        editMatrixButton = new javax.swing.JButton();
-        applyMatrixButton = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        generateImageButton = new javax.swing.JButton();
-        restoreOriginalButton = new javax.swing.JButton();
-        originalRadioButton = new javax.swing.JRadioButton();
-        modifiedRadioButton = new javax.swing.JRadioButton();
-        jPanel2 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        fileMenu = new javax.swing.JMenu();
-        loadImageMenuItem = new javax.swing.JMenuItem();
-        saveImageMenuItem = new javax.swing.JMenuItem();
-        filtersMenu = new javax.swing.JMenu();
-        negativeFilterMenuItem = new javax.swing.JMenuItem();
-        pixelizerFilterMenuItem = new javax.swing.JMenuItem();
-        identityFilterMenuItem = new javax.swing.JMenuItem();
-        tresholdFilterMenuItem = new javax.swing.JMenuItem();
-        oldStyleFilterMenuItem = new javax.swing.JMenuItem();
-        bwFilterMenuItem = new javax.swing.JMenuItem();
-        vinetteFilterMenuItem = new javax.swing.JMenuItem();
-        colorizerFilterMenuItem = new javax.swing.JMenuItem();
-        aboutMenu = new javax.swing.JMenu();
-        exitMenu = new javax.swing.JMenu();
+        setImageButton = new JButton();
+        editMatrixButton = new JButton();
+        applyMatrixButton = new JButton();
+        jScrollPane1 = new JScrollPane();
+        generateImageButton = new JButton();
+        restoreOriginalButton = new JButton();
+        originalRadioButton = new JRadioButton();
+        modifiedRadioButton = new JRadioButton();
+        jPanel2 = new JPanel();
+        jPanel3 = new JPanel();
+        jMenuBar1 = new JMenuBar();
+        fileMenu = new JMenu();
+        loadImageMenuItem = new JMenuItem();
+        saveImageMenuItem = new JMenuItem();
+        filtersMenu = new JMenu();
+        negativeFilterMenuItem = new JMenuItem();
+        pixelizerFilterMenuItem = new JMenuItem();
+        identityFilterMenuItem = new JMenuItem();
+        sharpeningFilterMenuItem = new JMenuItem();
+        blurFilterMenuItem = new JMenuItem();
+        bwFilterMenuItem = new JMenuItem();
+        vinetteFilterMenuItem = new JMenuItem();
+        colorizerFilterMenuItem = new JMenuItem();
+        aboutMenu = new JMenu();
+        exitMenu = new JMenu();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         setImageButton.setText("Select Image file");
-        setImageButton.setMaximumSize(new java.awt.Dimension(120, 25));
-        setImageButton.setMinimumSize(new java.awt.Dimension(120, 25));
-        setImageButton.setPreferredSize(new java.awt.Dimension(160, 25));
-        setImageButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        setImageButton.setMaximumSize(new Dimension(120, 25));
+        setImageButton.setMinimumSize(new Dimension(120, 25));
+        setImageButton.setPreferredSize(new Dimension(160, 25));
+        setImageButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 actionLoad(evt);
             }
         });
 
         editMatrixButton.setText("Edit matrix");
-        editMatrixButton.setMaximumSize(new java.awt.Dimension(120, 25));
-        editMatrixButton.setMinimumSize(new java.awt.Dimension(120, 25));
-        editMatrixButton.setPreferredSize(new java.awt.Dimension(160, 25));
+        editMatrixButton.setMaximumSize(new Dimension(120, 25));
+        editMatrixButton.setMinimumSize(new Dimension(120, 25));
+        editMatrixButton.setPreferredSize(new Dimension(160, 25));
 
         applyMatrixButton.setText("Apply matrix filter");
-        applyMatrixButton.setPreferredSize(new java.awt.Dimension(160, 25));
+        applyMatrixButton.setPreferredSize(new Dimension(160, 25));
+        applyMatrixButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                actionApplyMatrixFilter(evt);
+            }
+        });
 
         generateImageButton.setText("Generate Image");
-        generateImageButton.setPreferredSize(new java.awt.Dimension(160, 40));
-        generateImageButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        generateImageButton.setPreferredSize(new Dimension(160, 40));
+        generateImageButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 actionGenerate(evt);
             }
         });
 
         restoreOriginalButton.setText("Restore Original Image");
-        restoreOriginalButton.setPreferredSize(new java.awt.Dimension(160, 40));
-        restoreOriginalButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        restoreOriginalButton.setPreferredSize(new Dimension(160, 40));
+        restoreOriginalButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 printIntoLog("Restored previous image.");
                 currentImage = previousImage;
             }
@@ -105,44 +127,44 @@ public class NewJFrame extends javax.swing.JFrame {
         group.add(originalRadioButton);
         group.add(modifiedRadioButton);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 100, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 100, Short.MAX_VALUE)
         );
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        GroupLayout jPanel3Layout = new GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 410, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
         // The "file" menu group
         fileMenu.setText("   File");
-        fileMenu.setPreferredSize(new java.awt.Dimension(50, 11));
-        fileMenu.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        fileMenu.setPreferredSize(new Dimension(50, 11));
+        fileMenu.setVerticalAlignment(SwingConstants.TOP);
 
         loadImageMenuItem.setText("Load Image");
-        loadImageMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        loadImageMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 actionLoad(evt);
             }
         });
         fileMenu.add(loadImageMenuItem);
 
         saveImageMenuItem.setText("Save Image");
-        saveImageMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        saveImageMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 actionSave(evt);
             }
         });
@@ -152,38 +174,48 @@ public class NewJFrame extends javax.swing.JFrame {
 
         // The "filters" menu group
         filtersMenu.setText("Filters");
-        filtersMenu.setPreferredSize(new java.awt.Dimension(50, 11));
-        filtersMenu.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        filtersMenu.setPreferredSize(new Dimension(50, 11));
+        filtersMenu.setVerticalAlignment(SwingConstants.TOP);
 
         negativeFilterMenuItem.setText("Negative");
         filtersMenu.add(negativeFilterMenuItem);
-        negativeFilterMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        negativeFilterMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 filterNegative();
             }
         });
 
         pixelizerFilterMenuItem.setText("Pixelizer");
         filtersMenu.add(pixelizerFilterMenuItem);
-        pixelizerFilterMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        pixelizerFilterMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 filterPixelizer();
             }
         });
 
         identityFilterMenuItem.setText("Identity");
         filtersMenu.add(identityFilterMenuItem);
-        pixelizerFilterMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        pixelizerFilterMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 filterIdentity();
             }
         });
 
-        tresholdFilterMenuItem.setText("Treshold");
-        filtersMenu.add(tresholdFilterMenuItem);
+        sharpeningFilterMenuItem.setText("Sharpening");
+        filtersMenu.add(sharpeningFilterMenuItem);
+        sharpeningFilterMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                filterSharpening();
+            }
+        });
 
-        oldStyleFilterMenuItem.setText("OldStyleFilter");
-        filtersMenu.add(oldStyleFilterMenuItem);
+        blurFilterMenuItem.setText("Blur");
+        filtersMenu.add(blurFilterMenuItem);
+        blurFilterMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                filterBlur();
+            }
+        });
 
         bwFilterMenuItem.setText("BW filter");
         filtersMenu.add(bwFilterMenuItem);
@@ -197,85 +229,112 @@ public class NewJFrame extends javax.swing.JFrame {
         jMenuBar1.add(filtersMenu);
 
         aboutMenu.setText("About");
-        aboutMenu.setPreferredSize(new java.awt.Dimension(50, 11));
-        aboutMenu.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        aboutMenu.setPreferredSize(new Dimension(50, 11));
+        aboutMenu.setVerticalAlignment(SwingConstants.TOP);
         jMenuBar1.add(aboutMenu);
 
-        aboutMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        aboutMenu.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 actionAbout();
             }
         });
 
         exitMenu.setText("Exit");
-        exitMenu.setMaximumSize(new java.awt.Dimension(50, 546444));
-        exitMenu.setPreferredSize(new java.awt.Dimension(50, 20));
-        exitMenu.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        exitMenu.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        exitMenu.setMaximumSize(new Dimension(50, 546444));
+        exitMenu.setPreferredSize(new Dimension(50, 20));
+        exitMenu.setVerticalAlignment(SwingConstants.TOP);
+        exitMenu.setVerticalTextPosition(SwingConstants.TOP);
         jMenuBar1.add(exitMenu);
 
-        exitMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        exitMenu.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 actionExit();
             }
         });
 
         setJMenuBar(jMenuBar1);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addGap(56, 56, 56))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(editMatrixButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(setImageButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(applyMatrixButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                            .addComponent(editMatrixButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(setImageButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(applyMatrixButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane1)
-                            .addComponent(generateImageButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(restoreOriginalButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(originalRadioButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(modifiedRadioButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(generateImageButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(restoreOriginalButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(originalRadioButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(modifiedRadioButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(25, 25, 25))))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(setImageButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(editMatrixButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(setImageButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(editMatrixButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12)
-                        .addComponent(applyMatrixButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(generateImageButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(restoreOriginalButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(applyMatrixButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 165, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(generateImageButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(restoreOriginalButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(originalRadioButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(modifiedRadioButton))
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                    .addComponent(jPanel3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void filterSharpening() {
+        printIntoLog("Applied sharpening filter");
+        previousImage = currentImage;   // Save the current image as the previous image
+
+        // Apply blur to current picture
+        int[][] sharpMatrix = {
+                {-1, -1, -1},
+                {-1, 17, -1},
+                {-1, -1, -1},
+        };
+        applyMatrixFilter(sharpMatrix, true);
+    }
+
+    private void filterBlur() {
+        printIntoLog("Applied blur filter");
+        previousImage = currentImage;   // Save the current image as the previous image
+
+        int[][] blurMatrix = {
+                {1, 1, 1},
+                {1, 1, 1},
+                {1, 1, 1},
+        };
+
+        applyMatrixFilter(blurMatrix, true);
+    }
+
 
     private void actionExit() {
         System.exit(0);
@@ -283,6 +342,110 @@ public class NewJFrame extends javax.swing.JFrame {
 
     private void actionAbout() {
         JOptionPane.showMessageDialog(this, "Program Vytvořili:\n- Matematik: Artur Balák\n- GUI designér: Ondřej Tichý\n- Generální zprovozňovatel: Alex Brožík\n- Nějak zařídil aby to vůbec jelo: Herbert Géč\n\nSpeciální poděkování patří Petru Pavlovi.", "Credits", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void actionApplyMatrixFilter(ActionEvent evt) {
+        printIntoLog("Applied matrix filter");
+        previousImage = currentImage;   // Save the current image as the previous image
+
+        applyMatrixFilter(this.matrix, this.normalize);
+    }
+
+    private void applyMatrixFilter(int[][] matrix, boolean normalize) {
+        if (currentImage == null) {
+            JOptionPane.showMessageDialog(this, "There is no image loaded.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Width and height
+        int currentWidth = currentImage.getWidth();
+        int currentHeight = currentImage.getHeight();
+
+        // Analyze the size of matrix
+        int[] matrixSize = {matrix[0].length, matrix.length};
+
+        // Calculate the center; calculate offsets to go between array indexes and relative position within the matrix
+        // For even matrices, round the index down
+        int leftMatrixOffset = Math.floorDiv(matrixSize[0] - 1, 2);
+        int topMatrixOffset = Math.floorDiv(matrixSize[1] - 1, 2);
+
+        // Generate a reference image that is expanded on all sides by half the matrix size using mirroring
+        BufferedImage referenceImage = new BufferedImage(currentWidth + matrixSize[0] - 1, currentHeight + matrixSize[1] - 1, BufferedImage.TYPE_3BYTE_BGR);
+
+        // Paint the original image into the reference image
+        int[] imgData = new int[currentHeight * currentWidth];
+        currentImage.getRGB(0, 0, currentWidth, currentHeight, imgData, 0, currentWidth);
+        referenceImage.setRGB(leftMatrixOffset, topMatrixOffset, currentWidth, currentHeight, imgData, 0, currentWidth);
+
+
+        // Mirror the top and bottom edge
+        for (var mirroringX = leftMatrixOffset; mirroringX < leftMatrixOffset + currentWidth; mirroringX++) {
+            // For every x coordinate, fill in the empty space at top
+            for (var indexY = 0; indexY < topMatrixOffset; indexY++) {
+                referenceImage.setRGB(mirroringX, topMatrixOffset - indexY - 1, referenceImage.getRGB(mirroringX, topMatrixOffset + indexY));
+            }
+
+            // For every x coordinate, fill in the empty space at the bottom
+            for (var indexY = 0; indexY < matrixSize[1] - topMatrixOffset - 1; indexY++) {
+                referenceImage.setRGB(mirroringX, currentHeight + topMatrixOffset + indexY, referenceImage.getRGB(mirroringX, currentHeight + topMatrixOffset - indexY - 1));
+            }
+        }
+
+        // Mirror the left and right edge
+        for (var mirroringY = 0; mirroringY < referenceImage.getHeight(); mirroringY++) {
+            // For every y coordinate, fill in the empty space on the left
+            for (var indexX = 0; indexX < leftMatrixOffset; indexX++) {
+                referenceImage.setRGB(leftMatrixOffset - indexX - 1, mirroringY, referenceImage.getRGB(leftMatrixOffset + indexX, mirroringY));
+            }
+
+            // For every y coordinate, fill in the empty space on the right
+            for (var indexX = 0; indexX < matrixSize[0] - leftMatrixOffset - 1; indexX++) {
+                referenceImage.setRGB(currentWidth + leftMatrixOffset + indexX, mirroringY, referenceImage.getRGB(currentWidth + leftMatrixOffset - indexX - 1, mirroringY));
+            }
+        }
+
+        // Check if the value should be normalised or not - do it outside the cycles to reduce amount of checks
+        if (normalize) {
+            // For every pixel in currentImage (new image), calculate it's color based on the reference image after applying convolution
+            for (int x = 0; x < currentWidth; x++) {
+                for (int y = 0; y < currentHeight; y++) {
+                    // Define matrix helper
+                    matrixHelper m = new matrixHelper();
+
+                    // Go through the matrix area around the point, add each pixel to matrixHelper based on weight
+                    for (int matrixX = 0; matrixX < matrixSize[0]; matrixX++) {
+                        for (int matrixY = 0; matrixY < matrixSize[1]; matrixY++) {
+                            m.addColor(referenceImage.getRGB(x + matrixX, y + matrixY), matrix[matrixY][matrixX]);
+                        }
+                    }
+
+                    // Set the pixel in the final image (currentImage)
+                    currentImage.setRGB(x, y, m.getNormalisedValue());
+                }
+            }
+        } else {
+            // For every pixel in currentImage (new image), calculate it's color based on the reference image after applying convolution
+            for (int x = 0; x < currentWidth; x++) {
+                for (int y = 0; y < currentHeight; y++) {
+                    // Define matrix helper
+                    matrixHelper m = new matrixHelper();
+
+                    // Go through the matrix area around the point, add each pixel to matrixHelper based on weight
+                    for (int matrixX = 0; matrixX < matrixSize[0]; matrixX++) {
+                        for (int matrixY = 0; matrixY < matrixSize[1]; matrixY++) {
+                            m.addColor(referenceImage.getRGB(x + matrixX, y + matrixY), matrix[matrixY][matrixX]);
+                        }
+                    }
+
+                    // Set the pixel in the final image (currentImage)
+                    currentImage.setRGB(x, y, m.getValue());
+                }
+            }
+        }
+
+
+
+
     }
 
     private void filterPixelizer() {
@@ -400,7 +563,7 @@ public class NewJFrame extends javax.swing.JFrame {
         currentImage = generatedImg;
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void actionLoad(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void actionLoad(ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         JFileChooser fileChooserLoad = new JFileChooser();
         int returnVal = fileChooserLoad.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -417,7 +580,7 @@ public class NewJFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void actionSave(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void actionSave(ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         if (currentImage == null) {
             JOptionPane.showMessageDialog(this, "There is no image loaded.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -450,25 +613,25 @@ public class NewJFrame extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new NewJFrame().setVisible(true);
             }
@@ -476,30 +639,30 @@ public class NewJFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton setImageButton;
-    private javax.swing.JButton editMatrixButton;
-    private javax.swing.JButton applyMatrixButton;
-    private javax.swing.JButton generateImageButton;
-    private javax.swing.JButton restoreOriginalButton;
-    private javax.swing.JMenu fileMenu;
-    private javax.swing.JMenu filtersMenu;
-    private javax.swing.JMenu aboutMenu;
-    private javax.swing.JMenu exitMenu;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem loadImageMenuItem;
-    private javax.swing.JMenuItem colorizerFilterMenuItem;
-    private javax.swing.JMenuItem saveImageMenuItem;
-    private javax.swing.JMenuItem negativeFilterMenuItem;
-    private javax.swing.JMenuItem pixelizerFilterMenuItem;
-    private javax.swing.JMenuItem identityFilterMenuItem;
-    private javax.swing.JMenuItem tresholdFilterMenuItem;
-    private javax.swing.JMenuItem oldStyleFilterMenuItem;
-    private javax.swing.JMenuItem bwFilterMenuItem;
-    private javax.swing.JMenuItem vinetteFilterMenuItem;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JRadioButton originalRadioButton;
-    private javax.swing.JRadioButton modifiedRadioButton;
-    private javax.swing.JScrollPane jScrollPane1;
+    private JButton setImageButton;
+    private JButton editMatrixButton;
+    private JButton applyMatrixButton;
+    private JButton generateImageButton;
+    private JButton restoreOriginalButton;
+    private JMenu fileMenu;
+    private JMenu filtersMenu;
+    private JMenu aboutMenu;
+    private JMenu exitMenu;
+    private JMenuBar jMenuBar1;
+    private JMenuItem loadImageMenuItem;
+    private JMenuItem colorizerFilterMenuItem;
+    private JMenuItem saveImageMenuItem;
+    private JMenuItem negativeFilterMenuItem;
+    private JMenuItem pixelizerFilterMenuItem;
+    private JMenuItem identityFilterMenuItem;
+    private JMenuItem sharpeningFilterMenuItem;
+    private JMenuItem blurFilterMenuItem;
+    private JMenuItem bwFilterMenuItem;
+    private JMenuItem vinetteFilterMenuItem;
+    private JPanel jPanel2;
+    private JPanel jPanel3;
+    private JRadioButton originalRadioButton;
+    private JRadioButton modifiedRadioButton;
+    private JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
