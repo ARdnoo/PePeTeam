@@ -410,7 +410,7 @@ public class NewJFrame extends JFrame {
             for (int x = 0; x < currentWidth; x++) {
                 for (int y = 0; y < currentHeight; y++) {
                     // Define matrix helper
-                    matrixHelper m = new matrixHelper();
+                    MatrixHelper m = new MatrixHelper();
 
                     // Go through the matrix area around the point, add each pixel to matrixHelper based on weight
                     for (int matrixX = 0; matrixX < matrixSize[0]; matrixX++) {
@@ -428,7 +428,7 @@ public class NewJFrame extends JFrame {
             for (int x = 0; x < currentWidth; x++) {
                 for (int y = 0; y < currentHeight; y++) {
                     // Define matrix helper
-                    matrixHelper m = new matrixHelper();
+                    MatrixHelper m = new MatrixHelper();
 
                     // Go through the matrix area around the point, add each pixel to matrixHelper based on weight
                     for (int matrixX = 0; matrixX < matrixSize[0]; matrixX++) {
@@ -465,7 +465,7 @@ public class NewJFrame extends JFrame {
         for (int x = 0; x < currentWidth; x += 4) {
             for (int y = 0; y < currentHeight; y += 4) {
                 // For every block of 4*4 pixels, calculate the average color and paint it into the new image
-                matrixHelper colorAVG = new matrixHelper();
+                MatrixHelper colorAVG = new MatrixHelper();
 
                 for (int blockX = x; blockX < x + 4; blockX++) {
                     for (int blockY = y; blockY < y + 4; blockY++) {

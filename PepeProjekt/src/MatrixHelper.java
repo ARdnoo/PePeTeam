@@ -1,4 +1,4 @@
-public class matrixHelper {
+public class MatrixHelper {
     private int r = 0;
     private int g = 0;
     private int b = 0;
@@ -6,8 +6,19 @@ public class matrixHelper {
 
     public int getNormalisedValue() {
         if (colorCount == 0) return 0;
-        if (this.colorCount != 9) System.out.println("ERROR FR");
-        return 65536 * Math.round((float) this.r / colorCount) + 256 * Math.round((float) this.g / colorCount) + Math.round((float) this.b / colorCount);
+
+        int r = Math.round((float) this.r / colorCount);
+        int g = Math.round((float) this.g / colorCount);
+        int b = Math.round((float) this.b / colorCount);
+
+        if (r < -255) r = -255;
+        if (g < -255) g = -255;
+        if (b < -255) b = -255;
+        if (r > 0) r = 0;
+        if (g > 0) g = 0;
+        if (b > 0) b = 0;
+
+        return (r << 16) + (g << 8) + b;
     }
 
     public int getValue() {
@@ -15,8 +26,8 @@ public class matrixHelper {
     }
 
     public void addColor(int colorValue) {
-        this.r += colorValue / 65536;
-        this.g += (colorValue % 65536) / 256;
+        this.r += (colorValue / 65536) % 256;
+        this.g += (colorValue / 256) % 256;
         this.b += colorValue % 256;
         colorCount += 1;
     }
