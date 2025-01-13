@@ -116,6 +116,7 @@ public class NewJFrame extends JFrame {
             public void actionPerformed(ActionEvent evt) {
                 printIntoLog("Restored previous image.");
                 currentImage = previousImage;
+                updateDisplayedImage(currentImage);
             }
         });
 
@@ -368,6 +369,7 @@ public class NewJFrame extends JFrame {
         previousImage = currentImage;   // Save the current image as the previous image
 
         applyMatrixFilter(this.matrix, this.normalize);
+        updateDisplayedImage(currentImage);
     }
 
     private void applyMatrixFilter(int[][] matrix, boolean normalize) {
@@ -389,6 +391,7 @@ public class NewJFrame extends JFrame {
         int topMatrixOffset = Math.floorDiv(matrixSize[1] - 1, 2);
 
         // Generate a reference image that is expanded on all sides by half the matrix size using mirroring
+        BufferedImage newImage = new BufferedImage(currentWidth, currentHeight, BufferedImage.TYPE_3BYTE_BGR);
         BufferedImage referenceImage = new BufferedImage(currentWidth + matrixSize[0] - 1, currentHeight + matrixSize[1] - 1, BufferedImage.TYPE_3BYTE_BGR);
 
         // Paint the original image into the reference image
@@ -439,7 +442,7 @@ public class NewJFrame extends JFrame {
                     }
 
                     // Set the pixel in the final image (currentImage)
-                    currentImage.setRGB(x, y, m.getNormalisedValue());
+                    newImage.setRGB(x, y, m.getNormalisedValue());
                 }
             }
         } else {
@@ -457,14 +460,12 @@ public class NewJFrame extends JFrame {
                     }
 
                     // Set the pixel in the final image (currentImage)
-                    currentImage.setRGB(x, y, m.getValue());
+                    newImage.setRGB(x, y, m.getValue());
                 }
             }
         }
 
-
-
-
+        currentImage = newImage;
     }
 
     private void filterPixelizer() {
@@ -536,12 +537,15 @@ public class NewJFrame extends JFrame {
         printIntoLog("Applied negative filter");
         previousImage = currentImage;   // Save the current image as the previous image
 
+        BufferedImage newImage = new BufferedImage(currentImage.getWidth(), currentImage.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+
         // Apply the filter
-        for (int x = 0; x < previousImage.getWidth(); x++){
-            for (int y = 0; y < previousImage.getHeight(); y++){
-                currentImage.setRGB(x, y, 16777215 - currentImage.getRGB(x, y));
+        for (int x = 0; x < newImage.getWidth(); x++){
+            for (int y = 0; y < newImage.getHeight(); y++){
+                newImage.setRGB(x, y, 16777215 - currentImage.getRGB(x, y));
             }
         }
+        currentImage = newImage;
         updateDisplayedImage(currentImage);
     }
 
