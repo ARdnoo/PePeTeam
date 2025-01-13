@@ -127,6 +127,18 @@ public class NewJFrame extends JFrame {
         group.add(originalRadioButton);
         group.add(modifiedRadioButton);
 
+        originalRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateDisplayedImage(previousImage);
+            }
+        });
+
+        modifiedRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateDisplayedImage(currentImage);
+            }
+        });
+
         GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -233,8 +245,8 @@ public class NewJFrame extends JFrame {
         aboutMenu.setVerticalAlignment(SwingConstants.TOP);
         jMenuBar1.add(aboutMenu);
 
-        aboutMenu.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
+        aboutMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 actionAbout();
             }
         });
@@ -246,13 +258,18 @@ public class NewJFrame extends JFrame {
         exitMenu.setVerticalTextPosition(SwingConstants.TOP);
         jMenuBar1.add(exitMenu);
 
-        exitMenu.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
+        exitMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 actionExit();
             }
         });
 
+        jPanel3.setLayout(new BorderLayout());
+        jPanel3.add(imageLabel, BorderLayout.CENTER);
+
         setJMenuBar(jMenuBar1);
+
+        initializeLogTextArea();
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -320,6 +337,7 @@ public class NewJFrame extends JFrame {
                 {-1, -1, -1},
         };
         applyMatrixFilter(sharpMatrix, true);
+        updateDisplayedImage(currentImage);
     }
 
     private void filterBlur() {
@@ -333,6 +351,7 @@ public class NewJFrame extends JFrame {
         };
 
         applyMatrixFilter(blurMatrix, true);
+        updateDisplayedImage(currentImage);
     }
 
 
@@ -487,12 +506,26 @@ public class NewJFrame extends JFrame {
         }
 
         currentImage = newImage;
+        updateDisplayedImage(currentImage);
+    }
+
+    JTextArea logTextArea = new JTextArea();
+
+    private void initializeLogTextArea() {
+        logTextArea = new JTextArea();
+        logTextArea.setEditable(false);
+        logTextArea.setLineWrap(true);
+        logTextArea.setWrapStyleWord(true);
+
+        jScrollPane1.setViewportView(logTextArea);
     }
 
     // Function for writing into log
     private void printIntoLog(String message) {
         // For now, just write to console
-        System.out.println(message);
+        //System.out.println(message);
+        logTextArea.append(message + "\n");
+        logTextArea.setCaretPosition(logTextArea.getDocument().getLength()); // Posun na konec textu
     }
 
     private void filterNegative() {
@@ -509,6 +542,7 @@ public class NewJFrame extends JFrame {
                 currentImage.setRGB(x, y, 16777215 - currentImage.getRGB(x, y));
             }
         }
+        updateDisplayedImage(currentImage);
     }
 
     private void filterIdentity() {
@@ -518,7 +552,7 @@ public class NewJFrame extends JFrame {
         }
         printIntoLog("Applied identity filter.");
         previousImage = currentImage;
-
+        updateDisplayedImage(currentImage);
         // The new image is the same as the last image
     }
 
@@ -563,6 +597,17 @@ public class NewJFrame extends JFrame {
         currentImage = generatedImg;
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private JLabel imageLabel = new JLabel();
+
+    private void updateDisplayedImage(BufferedImage image) {
+        if (image != null) {
+            ImageIcon imageIcon = new ImageIcon(image);
+            imageLabel.setIcon(imageIcon);
+            imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            imageLabel.setVerticalAlignment(SwingConstants.CENTER);
+        }
+    }
+
     private void actionLoad(ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         JFileChooser fileChooserLoad = new JFileChooser();
         int returnVal = fileChooserLoad.showOpenDialog(this);
@@ -571,6 +616,8 @@ public class NewJFrame extends JFrame {
             try {
                 previousImage = currentImage; // Uložení původního obrázku
                 this.currentImage = ImageIO.read(file); // Načtení obrázku
+
+                updateDisplayedImage(currentImage);
 
                 printIntoLog("Loaded image: " + file.getName()); // Protokolování
                 //redrawPanel(); // Obnovení zobrazení panelu
