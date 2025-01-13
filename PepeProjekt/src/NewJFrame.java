@@ -120,8 +120,12 @@ public class NewJFrame extends JFrame {
             }
         });
 
+        originalRadioButton.setEnabled(false);
+        modifiedRadioButton.setEnabled(false);
         originalRadioButton.setText("Original Image");
         modifiedRadioButton.setText("Modified Image");
+
+        setPreferredSize(new Dimension(1000, 800)); //Základní velikost okna
 
         // Group the buttons
         ButtonGroup group = new ButtonGroup();
@@ -239,7 +243,7 @@ public class NewJFrame extends JFrame {
 
         colorizerFilterMenuItem.setText("Colorizer");
         filtersMenu.add(colorizerFilterMenuItem);
-        */
+         */
 
         jMenuBar1.add(filtersMenu);
 
@@ -341,6 +345,8 @@ public class NewJFrame extends JFrame {
         };
         applyMatrixFilter(RGBizerMatrix, true);
         updateDisplayedImage(currentImage);
+        modifiedRadioButton.setEnabled(true);
+        modifiedRadioButton.setSelected(true);
     }
 
     private void filterBlur() {
@@ -355,6 +361,8 @@ public class NewJFrame extends JFrame {
 
         applyMatrixFilter(blurMatrix, true);
         updateDisplayedImage(currentImage);
+        modifiedRadioButton.setEnabled(true);
+        modifiedRadioButton.setSelected(true);
     }
 
 
@@ -372,6 +380,8 @@ public class NewJFrame extends JFrame {
 
         applyMatrixFilter(this.matrix, this.normalize);
         updateDisplayedImage(currentImage);
+        modifiedRadioButton.setEnabled(true);
+        modifiedRadioButton.setSelected(true);
     }
 
     private void applyMatrixFilter(int[][] matrix, boolean normalize) {
@@ -510,6 +520,8 @@ public class NewJFrame extends JFrame {
 
         currentImage = newImage;
         updateDisplayedImage(currentImage);
+        modifiedRadioButton.setEnabled(true);
+        modifiedRadioButton.setSelected(true);
     }
 
     JTextArea logTextArea = new JTextArea();
@@ -549,6 +561,8 @@ public class NewJFrame extends JFrame {
         }
         currentImage = newImage;
         updateDisplayedImage(currentImage);
+        modifiedRadioButton.setEnabled(true);
+        modifiedRadioButton.setSelected(true);
     }
 
     private void filterIdentity() {
@@ -559,6 +573,8 @@ public class NewJFrame extends JFrame {
         printIntoLog("Applied identity filter.");
         previousImage = currentImage;
         updateDisplayedImage(currentImage);
+        modifiedRadioButton.setEnabled(true);
+        modifiedRadioButton.setSelected(true);
         // The new image is the same as the last image
     }
 
@@ -624,6 +640,9 @@ public class NewJFrame extends JFrame {
                 this.currentImage = ImageIO.read(file); // Načtení obrázku
 
                 updateDisplayedImage(currentImage);
+
+                originalRadioButton.setEnabled(true);
+                originalRadioButton.setSelected(true);
 
                 printIntoLog("Loaded image: " + file.getName()); // Protokolování
                 //redrawPanel(); // Obnovení zobrazení panelu
