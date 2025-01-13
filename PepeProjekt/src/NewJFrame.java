@@ -71,9 +71,9 @@ public class NewJFrame extends JFrame {
         identityFilterMenuItem = new JMenuItem();
         sharpeningFilterMenuItem = new JMenuItem();
         blurFilterMenuItem = new JMenuItem();
-        bwFilterMenuItem = new JMenuItem();
-        vinetteFilterMenuItem = new JMenuItem();
-        colorizerFilterMenuItem = new JMenuItem();
+        //bwFilterMenuItem = new JMenuItem();
+        //vinetteFilterMenuItem = new JMenuItem();
+        //colorizerFilterMenuItem = new JMenuItem();
         aboutMenu = new JMenu();
         exitMenu = new JMenu();
 
@@ -214,11 +214,11 @@ public class NewJFrame extends JFrame {
             }
         });
 
-        sharpeningFilterMenuItem.setText("Sharpening");
+        sharpeningFilterMenuItem.setText("RGBizer");
         filtersMenu.add(sharpeningFilterMenuItem);
         sharpeningFilterMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                filterSharpening();
+                filterRGBizer();
             }
         });
 
@@ -230,6 +230,7 @@ public class NewJFrame extends JFrame {
             }
         });
 
+        /*
         bwFilterMenuItem.setText("BW filter");
         filtersMenu.add(bwFilterMenuItem);
 
@@ -238,6 +239,7 @@ public class NewJFrame extends JFrame {
 
         colorizerFilterMenuItem.setText("Colorizer");
         filtersMenu.add(colorizerFilterMenuItem);
+        */
 
         jMenuBar1.add(filtersMenu);
 
@@ -327,17 +329,17 @@ public class NewJFrame extends JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void filterSharpening() {
-        printIntoLog("Applied sharpening filter");
+    private void filterRGBizer() {
+        printIntoLog("Applied RGBizer filter");
         previousImage = currentImage;   // Save the current image as the previous image
 
         // Apply blur to current picture
-        int[][] sharpMatrix = {
+        int[][] RGBizerMatrix = {
                 {-1, -1, -1},
                 {-1, 17, -1},
                 {-1, -1, -1},
         };
-        applyMatrixFilter(sharpMatrix, true);
+        applyMatrixFilter(RGBizerMatrix, true);
         updateDisplayedImage(currentImage);
     }
 
@@ -701,15 +703,15 @@ public class NewJFrame extends JFrame {
     private JMenu exitMenu;
     private JMenuBar jMenuBar1;
     private JMenuItem loadImageMenuItem;
-    private JMenuItem colorizerFilterMenuItem;
+    //private JMenuItem colorizerFilterMenuItem;
     private JMenuItem saveImageMenuItem;
     private JMenuItem negativeFilterMenuItem;
     private JMenuItem pixelizerFilterMenuItem;
     private JMenuItem identityFilterMenuItem;
     private JMenuItem sharpeningFilterMenuItem;
     private JMenuItem blurFilterMenuItem;
-    private JMenuItem bwFilterMenuItem;
-    private JMenuItem vinetteFilterMenuItem;
+    //private JMenuItem bwFilterMenuItem;
+    //private JMenuItem vinetteFilterMenuItem;
     private JPanel jPanel2;
     private JPanel jPanel3;
     private JRadioButton originalRadioButton;
