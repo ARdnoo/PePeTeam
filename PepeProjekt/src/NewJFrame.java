@@ -580,7 +580,7 @@ public class NewJFrame extends JFrame {
 
     private void actionGenerate(ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         printIntoLog("Generating image...");
-        int resolution = 1000;
+        int resolution = 300;
 
         BufferedImage generatedImg = new BufferedImage(3 * resolution, 2 * resolution, BufferedImage.TYPE_3BYTE_BGR);
 
@@ -617,6 +617,10 @@ public class NewJFrame extends JFrame {
         printIntoLog("Generation finished.");
         previousImage = currentImage; // Uložení původního obrázku
         currentImage = generatedImg;
+
+        originalRadioButton.setEnabled(true);
+        originalRadioButton.setSelected(true);
+        updateDisplayedImage(currentImage);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private JLabel imageLabel = new JLabel();
