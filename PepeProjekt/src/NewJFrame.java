@@ -114,11 +114,10 @@ public class NewJFrame extends JFrame {
         restoreOriginalButton.setPreferredSize(new Dimension(160, 40));
         restoreOriginalButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                printIntoLog("Restored previous image.");
-                currentImage = previousImage;
-                updateDisplayedImage(currentImage);
+                actionRestore();
             }
         });
+        restoreOriginalButton.setEnabled(false);
 
         originalRadioButton.setEnabled(false);
         modifiedRadioButton.setEnabled(false);
@@ -212,7 +211,7 @@ public class NewJFrame extends JFrame {
 
         identityFilterMenuItem.setText("Identity");
         filtersMenu.add(identityFilterMenuItem);
-        pixelizerFilterMenuItem.addActionListener(new ActionListener() {
+        identityFilterMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 filterIdentity();
             }
@@ -349,7 +348,18 @@ public class NewJFrame extends JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void actionRestore() {
+        printIntoLog("Restored previous image.");
+        currentImage = previousImage;
+        updateDisplayedImage(currentImage);
+        restoreOriginalButton.setEnabled(false);
+    }
+
     private void filterRGBizer() {
+        if (currentImage == null) {
+            JOptionPane.showMessageDialog(this, "There is no image loaded.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         printIntoLog("Applied RGBizer filter");
         previousImage = currentImage;   // Save the current image as the previous image
 
@@ -363,9 +373,14 @@ public class NewJFrame extends JFrame {
         updateDisplayedImage(currentImage);
         modifiedRadioButton.setEnabled(true);
         modifiedRadioButton.setSelected(true);
+        restoreOriginalButton.setEnabled(true);
     }
 
     private void filterBlur() {
+        if (currentImage == null) {
+            JOptionPane.showMessageDialog(this, "There is no image loaded.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         printIntoLog("Applied blur filter");
         previousImage = currentImage;   // Save the current image as the previous image
 
@@ -379,6 +394,7 @@ public class NewJFrame extends JFrame {
         updateDisplayedImage(currentImage);
         modifiedRadioButton.setEnabled(true);
         modifiedRadioButton.setSelected(true);
+        restoreOriginalButton.setEnabled(true);
     }
 
 
@@ -391,6 +407,10 @@ public class NewJFrame extends JFrame {
     }
 
     private void actionApplyMatrixFilter(ActionEvent evt) {
+        if (currentImage == null) {
+            JOptionPane.showMessageDialog(this, "There is no image loaded.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         printIntoLog("Applied matrix filter");
         previousImage = currentImage;   // Save the current image as the previous image
 
@@ -398,6 +418,7 @@ public class NewJFrame extends JFrame {
         updateDisplayedImage(currentImage);
         modifiedRadioButton.setEnabled(true);
         modifiedRadioButton.setSelected(true);
+        restoreOriginalButton.setEnabled(true);
     }
 
     private void applyMatrixFilter(int[][] matrix, boolean normalize) {
@@ -538,6 +559,7 @@ public class NewJFrame extends JFrame {
         updateDisplayedImage(currentImage);
         modifiedRadioButton.setEnabled(true);
         modifiedRadioButton.setSelected(true);
+        restoreOriginalButton.setEnabled(true);
     }
 
     JTextArea logTextArea = new JTextArea();
@@ -570,6 +592,7 @@ public class NewJFrame extends JFrame {
         updateDisplayedImage(currentImage);
         modifiedRadioButton.setEnabled(true);
         modifiedRadioButton.setSelected(true);
+        restoreOriginalButton.setEnabled(true);
     }
 
     private void filterIdentity() {
@@ -582,6 +605,7 @@ public class NewJFrame extends JFrame {
         updateDisplayedImage(currentImage);
         modifiedRadioButton.setEnabled(true);
         modifiedRadioButton.setSelected(true);
+        restoreOriginalButton.setEnabled(true);
         // The new image is the same as the last image
     }
 
