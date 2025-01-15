@@ -276,7 +276,23 @@ public class NewJFrame extends JFrame {
 
         setJMenuBar(jMenuBar1);
 
-        initializeLogTextArea();
+        logTextArea = new JTextArea();
+        logTextArea.setEditable(false);
+        logTextArea.setLineWrap(true);
+        logTextArea.setWrapStyleWord(true);
+
+        jScrollPane1.setViewportView(logTextArea);
+
+        jPanel2.setLayout(new BorderLayout());
+        jPanel2.add(matrixImageLabel, BorderLayout.CENTER);
+        matrixImageLabel.setPreferredSize(new Dimension(120, 120));
+
+        int[][] matrix = {
+                {3, 2, 1},
+                {4, 0, -1},
+                {-4, -3, -2}
+        };
+        createMatrixPreview(matrix);
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -526,15 +542,6 @@ public class NewJFrame extends JFrame {
 
     JTextArea logTextArea = new JTextArea();
 
-    private void initializeLogTextArea() {
-        logTextArea = new JTextArea();
-        logTextArea.setEditable(false);
-        logTextArea.setLineWrap(true);
-        logTextArea.setWrapStyleWord(true);
-
-        jScrollPane1.setViewportView(logTextArea);
-    }
-
     // Function for writing into log
     private void printIntoLog(String message) {
         // For now, just write to console
@@ -678,6 +685,58 @@ public class NewJFrame extends JFrame {
             }
         }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private static JLabel matrixImageLabel = new JLabel();
+
+    public static void createMatrixPreview(int[][] matrix) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        int cellSize = 40;
+
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+        for (int[] row : matrix) {
+            for (int value : row) {
+                min = Math.min(min, value);
+                max = Math.max(max, value);
+            }
+        }
+
+        BufferedImage matrixImage = new BufferedImage(cols * cellSize, rows * cellSize, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = matrixImage.createGraphics();
+
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                int value = matrix[row][col];
+
+                if (value == 0) {
+                    Color color = new Color(0, 0, 0);
+
+                    g.setColor(color);
+                    g.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+                }
+                else if (value > 0) {
+                    int normalizedValue = (int) (((double) value / max) * 255);
+                    Color color = new Color(0, 0, normalizedValue);
+
+                    g.setColor(color);
+                    g.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+                }
+                else {
+                    int normalizedValue = (int) (((double) value / min) * 255);
+                    Color color = new Color(normalizedValue, 0, 0);
+
+                    g.setColor(color);
+                    g.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+                }
+            }
+        }
+
+        g.dispose();
+
+        ImageIcon matrixImageIcon = new ImageIcon(matrixImage);
+        matrixImageLabel.setIcon(matrixImageIcon);
+    }
 
     /**
      * @param args the command line arguments
