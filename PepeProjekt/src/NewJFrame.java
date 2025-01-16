@@ -52,7 +52,7 @@ public class NewJFrame extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         setImageButton = new JButton();
-        editMatrixButton = new JButton();
+        //editMatrixButton = new JButton();
         applyMatrixButton = new JButton();
         jScrollPane1 = new JScrollPane();
         generateImageButton = new JButton();
@@ -89,10 +89,12 @@ public class NewJFrame extends JFrame {
             }
         });
 
+        /*
         editMatrixButton.setText("Edit matrix");
         editMatrixButton.setMaximumSize(new Dimension(120, 25));
         editMatrixButton.setMinimumSize(new Dimension(120, 25));
         editMatrixButton.setPreferredSize(new Dimension(160, 25));
+        */
 
         applyMatrixButton.setText("Apply matrix filter");
         applyMatrixButton.setPreferredSize(new Dimension(160, 25));
@@ -307,7 +309,7 @@ public class NewJFrame extends JFrame {
                         .addGap(56, 56, 56))
                     .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                            .addComponent(editMatrixButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            //.addComponent(editMatrixButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(setImageButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(applyMatrixButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane1)
@@ -325,8 +327,8 @@ public class NewJFrame extends JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(setImageButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(editMatrixButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
+                        //.addComponent(editMatrixButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        //.addGap(12, 12, 12)
                         .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12)
                         .addComponent(applyMatrixButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -799,7 +801,7 @@ public class NewJFrame extends JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JButton setImageButton;
-    private JButton editMatrixButton;
+    //private JButton editMatrixButton;
     private JButton applyMatrixButton;
     private JButton generateImageButton;
     private JButton restoreOriginalButton;
